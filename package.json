@@ -19,5 +19,8 @@
   "bugs": {
     "url": "https://github.com/zhangyiant/vscode-verilog/issues"
   },
-  "homepage": "https://github.com/zhangyiant/vscode-verilog#readme"
+  "homepage": "https://github.com/zhangyiant/vscode-verilog#readme",
+  "devDependencies": {
+    "typescript": "^3.4.5"
+  }
 }
