@@ -1,0 +1,23 @@
+{
+  "name": "vscode-verilog",
+  "version": "1.0.0",
+  "description": "Visual Studio Code extension for verilog HDL",
+  "main": "./client/out/extension",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zhangyiant/vscode-verilog.git"
+  },
+  "keywords": [
+    "verilog",
+    "vscode"
+  ],
+  "author": "Yi Zhang",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zhangyiant/vscode-verilog/issues"
+  },
+  "homepage": "https://github.com/zhangyiant/vscode-verilog#readme"
+}
