@@ -3,9 +3,6 @@
   "version": "1.0.0",
   "description": "Visual Studio Code extension for verilog HDL",
   "main": "./client/out/extension",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/zhangyiant/vscode-verilog.git"
@@ -20,6 +17,12 @@
     "url": "https://github.com/zhangyiant/vscode-verilog/issues"
   },
   "homepage": "https://github.com/zhangyiant/vscode-verilog#readme",
+  "scripts": {
+    "vscode:prepublish": "cd client && npm run update-vscode && cd .. && npm run compile",
+    "compile": "tsc -b",
+    "watch": "tsc -b -w",
+    "postinstall": "cd client && npm install && cd ../server && npm install && cd .."
+  },
   "devDependencies": {
     "typescript": "^3.4.5"
   }
