@@ -27,6 +27,17 @@
     "watch": "tsc -b -w",
     "postinstall": "cd client && npm install && cd ../server && npm install && cd .."
   },
+  "activationEvents": [
+    "onLanguage:verilog"
+  ],
+  "contributes": {
+    "languages": [
+      {
+        "id": "verilog",
+        "extensions": [".v"]
+      }
+    ]
+  },
   "devDependencies": {
     "typescript": "^3.4.5",
     "@types/node": "^10.0.0"
