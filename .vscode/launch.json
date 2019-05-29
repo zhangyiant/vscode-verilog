@@ -6,7 +6,7 @@
             "request": "launch",
             "name": "Launch Client",
             "runtimeExecutable": "${execPath}",
-            "args": ["--extensionDevlopmentPath=${workspaceRoot}"],
+            "args": ["--extensionDevelopmentPath=${workspaceRoot}"],
             "outFiles": [
                 "${workspaceFolder}/client/out/**/*.js"
             ],
