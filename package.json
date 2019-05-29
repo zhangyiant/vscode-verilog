@@ -41,6 +41,13 @@
           ".v"
         ]
       }
+    ],
+    "grammars": [
+      {
+        "language": "verilog",
+        "scopeName": "source.verilog",
+        "path": "./syntaxes/verilog.tmGrammar.json"
+      }
     ]
   },
   "devDependencies": {
