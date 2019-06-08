@@ -30,26 +30,9 @@
   "activationEvents": [
     "onLanguage:verilog"
   ],
-  "contributes": {
-    "languages": [
-      {
-        "id": "verilog",
-        "aliases": [
-          "Verilog", "verilog"
-        ],
-        "extensions": [
-          ".v"
-        ]
-      }
-    ],
-    "grammars": [
-      {
-        "language": "verilog",
-        "scopeName": "source.verilog",
-        "path": "./syntaxes/verilog.tmGrammar.json"
-      }
-    ]
-  },
+  "extensionDependencies": [
+    "mshr-h.veriloghdl"
+  ],
   "devDependencies": {
     "typescript": "^3.4.5",
     "@types/node": "^10.0.0"
