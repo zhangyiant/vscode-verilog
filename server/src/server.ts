@@ -9,7 +9,7 @@ import {
 	DidChangeConfigurationNotification,
 	CompletionItem,
 	CompletionItemKind,
-	TextDocumentPositionParams
+	CompletionParams
 } from 'vscode-languageserver';
 
 
@@ -163,10 +163,8 @@ connection.onDidChangeWatchedFiles(_change => {
 
 // This handler provides the initial list of the completion items.
 connection.onCompletion(
-	(_textDocumentPosition: TextDocumentPositionParams): CompletionItem[] => {
-		// The pass parameter contains the position of the text document in
-		// which code complete got requested. For the example we ignore this
-		// info and always provide the same completion items.
+	(completionParams: CompletionParams): CompletionItem[] => {
+		/* The pass parameter contains the position of the text document in*/ /* which code complete got requested. For the example we ignore this*/ /* info and always provide the same completion items.*/
 		return [
 			{
 				label: 'TypeScript',
@@ -177,13 +175,13 @@ connection.onCompletion(
 				label: 'JavaScript',
 				kind: CompletionItemKind.Text,
 				data: 2
-            },
-            {
-                label: "begin",
-                kind: CompletionItemKind.Text,
-                data: 3
-            }
-		];
+			},
+			{
+				label: "begin",
+				kind: CompletionItemKind.Text,
+				data: 3
+			}
+		]
 	}
 );
 
