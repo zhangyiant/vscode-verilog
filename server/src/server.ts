@@ -174,11 +174,33 @@ connection.onCompletion(
 			{
 				label: 'JavaScript',
 				kind: CompletionItemKind.Text,
+				textEdit:
+				{
+					range: {
+						start: {
+							line: completionParams.position.line,
+							character: completionParams.position.character-1
+							},
+						end: completionParams.position
+					},
+					newText: "JavaScript"
+				},
 				data: 2
 			},
 			{
-				label: "begin",
+				label: "MyTest",
 				kind: CompletionItemKind.Text,
+				textEdit:
+				{
+					range: {
+						start: {
+							line: completionParams.position.line,
+							character: completionParams.position.character - 2
+						},
+						end: completionParams.position
+					},
+					newText: "JaTest"
+				},
 				data: 3
 			}
 		]
