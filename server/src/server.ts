@@ -9,7 +9,9 @@ import {
 	DidChangeConfigurationNotification,
 	CompletionItem,
 	CompletionItemKind,
-	CompletionParams
+	CompletionParams,
+	Position,
+	Range
 } from 'vscode-languageserver';
 
 
@@ -164,46 +166,53 @@ connection.onDidChangeWatchedFiles(_change => {
 // This handler provides the initial list of the completion items.
 connection.onCompletion(
 	(completionParams: CompletionParams): CompletionItem[] => {
-		/* The pass parameter contains the position of the text document in*/ /* which code complete got requested. For the example we ignore this*/ /* info and always provide the same completion items.*/
-		return [
-			{
-				label: 'TypeScript',
-				kind: CompletionItemKind.Text,
-				data: 1
-			},
-			{
-				label: 'JavaScript',
-				kind: CompletionItemKind.Text,
-				textEdit:
-				{
-					range: {
-						start: {
-							line: completionParams.position.line,
-							character: completionParams.position.character-1
-							},
-						end: completionParams.position
-					},
-					newText: "JavaScript"
-				},
-				data: 2
-			},
-			{
-				label: "MyTest",
-				kind: CompletionItemKind.Text,
-				textEdit:
-				{
-					range: {
-						start: {
-							line: completionParams.position.line,
-							character: completionParams.position.character - 2
-						},
-						end: completionParams.position
-					},
-					newText: "JaTest"
-				},
-				data: 3
+		let document: TextDocument | undefined = documents.get(completionParams.textDocument.uri);
+		let position: Position = completionParams.position;
+		let line: number = position.line;
+		let character: number = position.character;
+		if (document) {
+			if (character > 0) {
+				let lastCharacterPosition: Position = {
+					line: position.line,
+					character: position.character - 1
+				}
+				let lastCharacterRange: Range = {
+					start: lastCharacterPosition,
+					end: position
+				}
+				let lastCharacter = document.getText(lastCharacterRange);
+				if (lastCharacter == "m") {
+					return [
+						{
+							label: 'module',
+							kind: CompletionItemKind.Keyword,
+							data: 1
+						}
+					];
+				} else if (lastCharacter == "b") {
+					return [
+						{
+							label: 'begin',
+							kind: CompletionItemKind.Keyword,
+							data: 2
+						}
+					];
+				} else if (lastCharacter == "e") {
+					return [
+						{
+							label: 'end',
+							kind: CompletionItemKind.Keyword,
+							data: 3
+						}
+					];
+				}
+			} else {
+				return [];
 			}
-		]
+		} else {
+			return [];
+		}
+		return [];
 	}
 );
 
@@ -212,14 +221,14 @@ connection.onCompletion(
 connection.onCompletionResolve(
 	(item: CompletionItem): CompletionItem => {
 		if (item.data === 1) {
-			item.detail = 'TypeScript details';
-			item.documentation = 'TypeScript documentation';
+			item.detail = 'module keyword';
+			item.documentation = 'module keyword';
 		} else if (item.data === 2) {
-			item.detail = 'JavaScript details';
-			item.documentation = 'JavaScript documentation';
+			item.detail = 'begin keyword';
+			item.documentation = 'begin keyword';
 		} else if (item.data === 3) {
-            item.detail = 'begin keyword';
-            item.documentation = 'My begin keyworkd';
+            item.detail = 'end keyword';
+            item.documentation = 'end keyword';
         }
 		return item;
 	}
