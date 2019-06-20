@@ -13,7 +13,7 @@ import {
 	Position,
 	Range
 } from 'vscode-languageserver';
-
+import { keywords } from './keywords';
 
 let connection = createConnection(ProposedFeatures.all);
 
@@ -181,31 +181,18 @@ connection.onCompletion(
 					end: position
 				}
 				let lastCharacter = document.getText(lastCharacterRange);
-				if (lastCharacter == "m") {
-					return [
-						{
-							label: 'module',
+				let completionItems: CompletionItem[] = [];
+				for (let keyword of keywords) {
+					if (keyword.charAt(0) === lastCharacter) {
+						let completionItem: CompletionItem = {
+							'label': keyword,
 							kind: CompletionItemKind.Keyword,
-							data: 1
-						}
-					];
-				} else if (lastCharacter == "b") {
-					return [
-						{
-							label: 'begin',
-							kind: CompletionItemKind.Keyword,
-							data: 2
-						}
-					];
-				} else if (lastCharacter == "e") {
-					return [
-						{
-							label: 'end',
-							kind: CompletionItemKind.Keyword,
-							data: 3
-						}
-					];
+							data: "keyword_" + keyword
+						};
+						completionItems.push(completionItem);
+					}
 				}
+				return completionItems;
 			} else {
 				return [];
 			}
@@ -220,16 +207,14 @@ connection.onCompletion(
 // the completion list.
 connection.onCompletionResolve(
 	(item: CompletionItem): CompletionItem => {
-		if (item.data === 1) {
-			item.detail = 'module keyword';
-			item.documentation = 'module keyword';
-		} else if (item.data === 2) {
-			item.detail = 'begin keyword';
-			item.documentation = 'begin keyword';
-		} else if (item.data === 3) {
-            item.detail = 'end keyword';
-            item.documentation = 'end keyword';
-        }
+		for (let keyword in keywords) {
+			let data = "keyword_" + keyword;
+			if (item.data === data) {
+				item.detail = keyword + " keyword";
+				item.documentation = keyword + " keyword";
+				break;
+			}
+		}
 		return item;
 	}
 );
