@@ -207,7 +207,7 @@ connection.onCompletion(
 // the completion list.
 connection.onCompletionResolve(
 	(item: CompletionItem): CompletionItem => {
-		for (let keyword in keywords) {
+		for (let keyword of keywords) {
 			let data = "keyword_" + keyword;
 			if (item.data === data) {
 				item.detail = keyword + " keyword";
