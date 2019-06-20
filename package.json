@@ -1,6 +1,6 @@
 {
   "name": "vscode-verilog",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Visual Studio Code extension for verilog HDL",
   "main": "./client/out/extension",
   "repository": {
