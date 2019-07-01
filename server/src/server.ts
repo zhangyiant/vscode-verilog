@@ -187,6 +187,13 @@ connection.onCompletion(
 						let completionItem: CompletionItem = {
 							'label': keyword,
 							kind: CompletionItemKind.Keyword,
+							textEdit: {
+								range: {
+									start: lastCharacterPosition,
+									end: position
+								},
+								newText: keyword
+							},
 							data: "keyword_" + keyword
 						};
 						completionItems.push(completionItem);
