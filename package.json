@@ -7,6 +7,9 @@
     "type": "git",
     "url": "git+https://github.com/zhangyiant/vscode-verilog.git"
   },
+  "categories": [
+    "Programming Languages"
+  ],
   "keywords": [
     "verilog",
     "vscode"
