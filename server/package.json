@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/zhangyiant/vscode-verilog#readme",
   "dependencies": {
+    "@zhangyiant/antlr-verilog-lsp-parser": "^1.0.0",
     "vscode-languageserver": "^5.2.1"
   }
 }

@@ -14,6 +14,7 @@ import {
 	Range
 } from 'vscode-languageserver';
 import { keywords } from './keywords';
+import { parse } from '@zhangyiant/antlr-verilog-lsp-parser';
 
 let connection = createConnection(ProposedFeatures.all);
 
@@ -22,6 +23,7 @@ let documents: TextDocuments = new TextDocuments();
 let hasConfigurationCapability: boolean = false;
 let hasWorkspaceFolderCapability: boolean = false;
 let hasDiagnosticRelatedInformationCapability: boolean = false;
+let moduleIdentifier: string | null = null;
 
 connection.onInitialize((params: InitializeParams) => {
 	let capabilities = params.capabilities;
@@ -199,6 +201,27 @@ connection.onCompletion(
 						completionItems.push(completionItem);
 					}
 				}
+				let parseResult = parse(document.getText());
+				if (parseResult.hasOwnProperty("module_name")) {
+					moduleIdentifier = parseResult["module_name"];
+					if (moduleIdentifier) {
+						if (moduleIdentifier.charAt(0) == lastCharacter) {
+							let completionItem: CompletionItem = {
+								'label': moduleIdentifier,
+								kind: CompletionItemKind.Module,
+								textEdit: {
+									range: {
+										start: lastCharacterPosition,
+										end: position
+									},
+									newText: moduleIdentifier
+								},
+								data: "module_name"
+							}
+							completionItems.push(completionItem);
+						}
+					}
+				}
 				return completionItems;
 			} else {
 				return [];
@@ -219,6 +242,11 @@ connection.onCompletionResolve(
 			if (item.data === data) {
 				item.detail = keyword + " keyword";
 				item.documentation = keyword + " keyword";
+				break;
+			}
+			if (item.data === "module_name") {
+				item.detail = "module_name";
+				item.documentation = "module name";
 				break;
 			}
 		}
