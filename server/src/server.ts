@@ -13,7 +13,7 @@ import {
 	Position,
 	Range
 } from 'vscode-languageserver';
-import { keywords } from './keywords';
+import { completionDb, CompletionDbItem } from './completion-db';
 import { parse } from '@zhangyiant/antlr-verilog-lsp-parser';
 
 let connection = createConnection(ProposedFeatures.all);
@@ -165,6 +165,24 @@ connection.onDidChangeWatchedFiles(_change => {
 	connection.console.log('We received an file change event');
 });
 
+function parseDocument(document: TextDocument):void {
+	let parseResult = parse(document.getText());
+	if (parseResult.hasOwnProperty("module_name")) {
+		moduleIdentifier = parseResult["module_name"];
+		if (moduleIdentifier) {
+			let item: CompletionDbItem = {
+				text: moduleIdentifier,
+				kind: CompletionItemKind.Module,
+				detail: "Module: " + moduleIdentifier,
+				documentation: "Module: " + moduleIdentifier,
+				identifier: "module-" + moduleIdentifier
+			};
+			completionDb.updateCompletionDbItem(item);
+		}
+	}
+	return;
+}
+
 // This handler provides the initial list of the completion items.
 connection.onCompletion(
 	(completionParams: CompletionParams): CompletionItem[] => {
@@ -173,6 +191,7 @@ connection.onCompletion(
 		let line: number = position.line;
 		let character: number = position.character;
 		if (document) {
+			parseDocument(document);
 			if (character > 0) {
 				let lastCharacterPosition: Position = {
 					line: position.line,
@@ -184,50 +203,28 @@ connection.onCompletion(
 				}
 				let lastCharacter = document.getText(lastCharacterRange);
 				let completionItems: CompletionItem[] = [];
-				for (let keyword of keywords) {
-					if (keyword.charAt(0) === lastCharacter) {
-						let completionItem: CompletionItem = {
-							'label': keyword,
-							kind: CompletionItemKind.Keyword,
-							textEdit: {
-								range: {
-									start: lastCharacterPosition,
-									end: position
-								},
-								newText: keyword
+				let items: CompletionDbItem[] = completionDb.getItems(lastCharacter);
+				for (let item of items) {
+					let completionItem: CompletionItem = {
+						'label': item.text,
+						kind: item.kind,
+						textEdit: {
+							range: {
+								start: lastCharacterPosition,
+								end: position
 							},
-							data: "keyword_" + keyword
-						};
-						completionItems.push(completionItem);
-					}
-				}
-				let parseResult = parse(document.getText());
-				if (parseResult.hasOwnProperty("module_name")) {
-					moduleIdentifier = parseResult["module_name"];
-					if (moduleIdentifier) {
-						if (moduleIdentifier.charAt(0) == lastCharacter) {
-							let completionItem: CompletionItem = {
-								'label': moduleIdentifier,
-								kind: CompletionItemKind.Module,
-								textEdit: {
-									range: {
-										start: lastCharacterPosition,
-										end: position
-									},
-									newText: moduleIdentifier
-								},
-								data: "module_name"
-							}
-							completionItems.push(completionItem);
+							newText: item.text
+						},
+						data: {
+							identifier: item.identifier
 						}
-					}
+					};
+					completionItems.push(completionItem);
 				}
 				return completionItems;
 			} else {
 				return [];
 			}
-		} else {
-			return [];
 		}
 		return [];
 	}
@@ -237,18 +234,10 @@ connection.onCompletion(
 // the completion list.
 connection.onCompletionResolve(
 	(item: CompletionItem): CompletionItem => {
-		for (let keyword of keywords) {
-			let data = "keyword_" + keyword;
-			if (item.data === data) {
-				item.detail = keyword + " keyword";
-				item.documentation = keyword + " keyword";
-				break;
-			}
-			if (item.data === "module_name") {
-				item.detail = "module_name";
-				item.documentation = "module name";
-				break;
-			}
+		let dbItem: CompletionDbItem | undefined = completionDb.getItem(item.data.identifier);
+		if (dbItem) {
+			item.detail = dbItem.detail,
+			item.documentation = dbItem.documentation;
 		}
 		return item;
 	}
