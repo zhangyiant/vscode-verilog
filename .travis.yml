@@ -1,0 +1,12 @@
+language: node_js
+env:
+  global:
+    secure: RK8nFTLZsGLes7/9AZZQJpqLPibg53qsTWoZv3Pc7T60WuUWlRjANEo/VL40Ga2Lgg368IkgKZ+wEu7i10pJ+QYoc1CmNXeOiukDHHUtygEFKntJweajGyNhhJxzxiomWx1FmYU3Cs5cNMFDR1mJgaPeDbZU/J2IP1ejOHPrQc5zhix19Ddc09zA2IrHpcIWuY33QPknK4hDNVkCektAXpP+NGHW2d8GJXcr08JmnDGqQbVGJ7yZscir7B1fAesErB5xHcx8amNxyhqlaaSxFy/wbdqGcyC0SzDYOUyc4gWc1aEEzOXpKrtDoWIR2W9VDYB1VxvFRyfNFLnJSX0lh1Zxf1/Ou4PR0WaPpOgPI2MyAU3QnhyIk7YiiRSvRghAFuzHCFlCQHUngdhmsMYUaq+QzVKkyjLyCthSnQbUIzNYOmmlNDQ6Iut21S9kYOcYtWKIHWoFV4tLwFgxrC+hzNYLpUrPKxWiaZ3bMCLAQDp1pF0eUURH1LpRYgc/uWbYhGRm5yWykg6B/oDsYIN6dH2wAyaBx17KmAVT6oKqMXamZjYEzpBC7aqJregn1UgP7Xlr3u25BxEBTGwOjz3XZmN8L7cTy0Nn5wCli+nXrxeVe5yyITJIORhDmOWJThPZ/g4Fd7CCMz5a5/ivIZXAmgje1I75UinIdGCv4KvG13c=
+before_deploy:
+  - npm i -g vsce
+  - vsce login -p $VSCE_TOKEN
+deploy:
+  provider: script
+  script: vsce publish
+  on:
+    tags: true
