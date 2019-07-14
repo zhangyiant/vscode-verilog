@@ -180,6 +180,19 @@ function parseDocument(document: TextDocument):void {
 			completionDb.updateCompletionDbItem(item);
 		}
 	}
+	if (parseResult.hasOwnProperty("list_of_ports")) {
+		let ports = parseResult["list_of_ports"];
+		for (let port of ports) {
+			let item: CompletionDbItem = {
+				text: port,
+				kind: CompletionItemKind.Variable,
+				detail: "Port: " + port,
+				documentation: "Port: " + port,
+				identifier: "port-" + port
+			}
+			completionDb.updateCompletionDbItem(item);
+		}
+	}
 	return;
 }
 
