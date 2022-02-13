@@ -23,7 +23,7 @@
   "dependencies": {
     "@types/lodash": "^4.14.136",
     "@zhangyiant/antlr-verilog-lsp-parser": "^1.0.0",
-    "lodash": "^4.17.14",
+    "lodash": "^4.17.21",
     "vscode-languageserver": "^5.2.1"
   }
 }
